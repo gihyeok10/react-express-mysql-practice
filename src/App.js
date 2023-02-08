@@ -20,6 +20,9 @@ function App() {
         "content-type" : "application/json",
       },
       body : JSON.stringify(post),
+    }) .then((res)=>res.json())
+    .then((json)=>{
+      console.log(json.text);
     });
   };
  
