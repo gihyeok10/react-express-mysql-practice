@@ -1,5 +1,8 @@
+
+import './App.css';
+import { useState } from 'react';
 import "./App.css";
-import Customer from "./components/Customer";
+import Customer from "./component/Customer"
 import {Table,TableBody,TableHead,TableCell,Paper} from "@material-ui/core";
 
 import {withStyles} from "@mui/material";
@@ -16,6 +19,11 @@ const styles = theme => ({
   }
 })
 function App() {
+ const [id,setId] = useState("")   
+ const handleChange = (e) => {
+    setId(e.target.value)
+    e.target.name = e.target.value
+ }
   const customers = [
     {
       id: 1,
@@ -43,7 +51,25 @@ function App() {
     },
   ];
 
+ const submitId = ()=>{
+    const post = {
+        plzid : id,
+    }
+   
+    fetch("http://localhost:3001/idplz", {
+      method : "post", // 통신방법
+      headers : {
+        "content-type" : "application/json",
+      },
+      body : JSON.stringify(post),
+    }) .then((res)=>res.json())
+    .then((json)=>{
+      console.log(json.text);
+    });
+  };
+ 
   return (
+   
     <Paper className="root">
       <Table className="table">
       <TableHead>
