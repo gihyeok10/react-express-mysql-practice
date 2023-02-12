@@ -1,44 +1,22 @@
-const express = require("express"); 
+const express = require("express");
 const app = express();
-const port = 3001; // react의 기본값은 3000이니까 3000이 아닌 아무 수
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const mysql = require("mysql"); // mysql 모듈 사용
+const mysql = require("mysql");
+const PORT = process.env.port || 8000;
 
-var connection = mysql.createConnection({
-    host : "localhost",
-    user : "root", //mysql의 id
-    password : "zxcv12", //mysql의 password
-    database : "test", //사용할 데이터베이스
+const db = mysql.createPool({
+  host: "localhost",
+  user: "root",
+  password: "zxcv123",
+  database: "world",
 });
 
-connection.connect();
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(cors());
-
-app.get('/', (req, res) =>{
-    res.send('혁이는 코딩 중!')
-})
-
-app.post("/idplz", (req,res)=>{
-    const test = req.body.test;
-    // console.log(req.body);
-    connection.query("INSERT INTO test (name) values (?)",[test],
-    function(err,rows,fields){
-        if(err){
-            console.log("실패");
-            // console.log(err);
-        }else{
-            console.log("성공");
-            // console.log(rows);
-        };
-    });
-
-    
+app.get("/", (req, res) => {
+  const sqlQuery = "INSERT INTO requested (rowno) VALUES (1)";
+  db.query(sqlQuery, (err, result) => {
+    res.send("success!");
+  });
 });
 
-app.listen(port, ()=>{
-    console.log(`Connect at http://localhost:${port}`);
-})
+app.listen(PORT, () => {
+  console.log(`running on port ${PORT}`);
+});
